@@ -44,49 +44,58 @@ fn part1() -> u32 {
     gamma * epsilon
 }
 
-fn extract_value(mut values: Vec<String>, filter_cb: fn(u32, u32) -> char) -> u32 {
-    let value_len = values[0].len();
-
+fn extract_value(mut values: Vec<u32>, value_len: u32, filter_cb: fn(u32, u32) -> u32) -> u32 {
     for pos in 0..value_len {
-        let ones = values.iter().map(|v| v.chars().nth(pos).unwrap().to_digit(10).unwrap()).sum();
+        let get_bit = |v, pos| (v >> (value_len - pos - 1)) & 1;
+
+        let ones = values.iter().map(|v| get_bit(v, pos)).sum();
         let zeroes = values.len() as u32 - ones;
 
-        let criteria = filter_cb(ones, zeroes);
-        values = values.iter().filter(|v| v.chars().nth(pos).unwrap() == criteria).cloned().collect();
-
+        values = values
+            .iter()
+            .filter(|v| get_bit(v, pos) == filter_cb(ones, zeroes))
+            .cloned()
+            .collect();
         if values.len() == 1 {
             break;
         }
     }
 
-    u32::from_str_radix(&values[0], 2).unwrap()
+    values[0]
 }
 
 fn part2() -> u32 {
     let file = File::open("src/day3/input.txt").unwrap();
-    let values: Vec<String> = BufReader::new(file).lines().map(|l| l.unwrap()).collect();
+
+    let str_values: Vec<String> = BufReader::new(file).lines().map(|l| l.unwrap()).collect();
+    let value_len = str_values[0].len() as u32;
+
+    let values: Vec<u32> = str_values
+        .iter()
+        .map(|v| u32::from_str_radix(&v, 2).unwrap())
+        .collect();
 
     // Oxygen
     let oxygen_filter_cb = |ones: u32, zeroes: u32| {
         if ones >= zeroes {
-            '1'
+            1
         } else {
-            '0'
+            0
         }
     };
 
-    let oxygen = extract_value(values.clone(), oxygen_filter_cb);
+    let oxygen = extract_value(values.clone(), value_len, oxygen_filter_cb);
 
     // CO2
     let co2_filter_cb = |ones: u32, zeroes: u32| {
         if zeroes <= ones {
-            '0'
+            0
         } else {
-            '1'
+            1
         }
     };
 
-    let co2 = extract_value(values, co2_filter_cb);
+    let co2 = extract_value(values, value_len, co2_filter_cb);
 
     oxygen * co2
 }
