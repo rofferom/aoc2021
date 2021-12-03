@@ -72,11 +72,11 @@ fn part2() -> u32 {
 
     let values: Vec<u32> = str_values
         .iter()
-        .map(|v| u32::from_str_radix(&v, 2).unwrap())
+        .map(|v| u32::from_str_radix(v, 2).unwrap())
         .collect();
 
     // Oxygen
-    let oxygen_filter_cb = |ones: u32, zeroes: u32| {
+    let oxygen_filter_cb = |ones, zeroes| {
         if ones >= zeroes {
             1
         } else {
@@ -87,7 +87,7 @@ fn part2() -> u32 {
     let oxygen = extract_value(values.clone(), value_len, oxygen_filter_cb);
 
     // CO2
-    let co2_filter_cb = |ones: u32, zeroes: u32| {
+    let co2_filter_cb = |ones, zeroes| {
         if zeroes <= ones {
             0
         } else {
