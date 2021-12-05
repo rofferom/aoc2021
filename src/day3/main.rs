@@ -1,5 +1,5 @@
-use std::io::{BufRead, BufReader};
 use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 fn insert_bit(value: u32, b: u32) -> u32 {
     (value << 1) | b

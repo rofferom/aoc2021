@@ -75,7 +75,7 @@ impl std::fmt::Display for Grid {
             }
 
             if row != GRID_SIZE - 1 {
-                writeln!(f, "").unwrap();
+                writeln!(f).unwrap();
             }
         }
 

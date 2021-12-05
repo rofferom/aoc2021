@@ -1,5 +1,5 @@
-use std::io::{BufRead, BufReader};
 use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 struct Window {
     sum: u32,

@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fs;
 
@@ -20,7 +21,7 @@ impl Segment {
         let raw_segment: Vec<&str> = s.split(" -> ").collect();
 
         let parse_segment = |v: &str| {
-            let splitted: Vec<&str> = v.split(",").collect();
+            let splitted: Vec<&str> = v.split(',').collect();
 
             let x = splitted[0].parse().unwrap();
             let y = splitted[1].parse().unwrap();
@@ -40,12 +41,10 @@ impl Segment {
 }
 
 fn get_increment(x: i32, y: i32) -> i32 {
-    if x < y {
-        1
-    } else if y < x {
-        -1
-    } else {
-        0
+    match x.cmp(&y) {
+        Ordering::Greater => -1,
+        Ordering::Less => 1,
+        Ordering::Equal => 0,
     }
 }
 
