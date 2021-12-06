@@ -1,26 +1,24 @@
-use std::collections::LinkedList;
 use std::fs;
 
 const INPUT_PATH: &str = "src/day6/input.txt";
 
 fn compute_input(input: &str, days: u32) -> u64 {
-    let mut fishes: Vec<u64> = vec![0; 9];
+    let mut fishes: [u64; 9] = [0; 9];
     for fish in input.split(',').map(|x| x.parse::<usize>().unwrap()) {
         fishes[fish] += 1;
     }
 
-    let mut list = LinkedList::from_iter(fishes.iter().copied());
+    let mut idx: usize = 0;
 
     for _ in 0..days {
-        let front = list.pop_front().unwrap();
+        let front = fishes[idx];
+        idx = (idx + 1) % 9;
 
-        let sixth = list.iter_mut().nth(6).unwrap();
-        *sixth += front;
-
-        list.push_back(front);
+        fishes[(idx + 6) % 9] += front;
+        fishes[(idx + 8) % 9] = front;
     }
 
-    list.iter().sum()
+    fishes.iter().sum()
 }
 
 fn main() {
