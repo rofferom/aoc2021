@@ -10,32 +10,27 @@ fn abs_diff(x: u32, y: u32) -> u32 {
     }
 }
 
-fn part1(input: &str) -> u32 {
-    let mut crabs: Vec<u32> = input.split(',').map(|x| x.parse().unwrap()).collect();
-    crabs.sort_unstable();
+fn find_shortest_path(input: &str, distance_cb: fn(pos: u32, target: u32) -> u32) -> u32 {
+    let crabs: Vec<u32> = input.split(',').map(|x| x.parse().unwrap()).collect();
 
-    let median = crabs[crabs.len() / 2];
-    crabs.iter().map(|&x| abs_diff(median, x)).sum()
+    let min_crab = *crabs.iter().min().unwrap();
+    let max_crab = *crabs.iter().max().unwrap();
+
+    (min_crab..(max_crab + 1))
+        .map(|target| crabs.iter().map(|&x| distance_cb(x, target)).sum())
+        .min()
+        .unwrap()
+}
+
+fn part1(input: &str) -> u32 {
+    find_shortest_path(input, |pos, target| abs_diff(pos, target))
 }
 
 fn part2(input: &str) -> u32 {
-    let crabs: Vec<u32> = input.split(',').map(|x| x.parse().unwrap()).collect();
-    let mean = crabs.iter().sum::<u32>() / (crabs.len() as u32);
-    let mut score = u32::MAX;
-
-    for target in (mean - 1)..(mean + 2) {
-        let local_score = crabs
-            .iter()
-            .map(|&x| {
-                let dist = abs_diff(target, x);
-                (dist * (dist + 1)) / 2
-            })
-            .sum();
-
-        score = std::cmp::min(score, local_score);
-    }
-
-    score
+    find_shortest_path(input, |pos, target| {
+        let dist = abs_diff(pos, target);
+        (dist * (dist + 1)) / 2
+    })
 }
 
 fn main() {
