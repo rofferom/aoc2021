@@ -18,10 +18,10 @@ struct Segment {
 
 impl Segment {
     fn from_str(s: &str) -> Self {
-        let raw_segment: Vec<&str> = s.split(" -> ").collect();
+        let raw_segment: Vec<_> = s.split(" -> ").collect();
 
         let parse_segment = |v: &str| {
-            let splitted: Vec<&str> = v.split(',').collect();
+            let splitted: Vec<_> = v.split(',').collect();
 
             let x = splitted[0].parse().unwrap();
             let y = splitted[1].parse().unwrap();
@@ -49,7 +49,7 @@ fn get_increment(x: i32, y: i32) -> i32 {
 }
 
 fn score(segments: Vec<Segment>) -> u32 {
-    let mut diagram: HashMap<Point, u32> = HashMap::new();
+    let mut diagram = HashMap::new();
 
     let mut update_diagram = |p: &Point| {
         let value = diagram.get_mut(p);

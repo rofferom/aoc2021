@@ -14,7 +14,7 @@ fn main() {
     let file = File::open("src/day1/input.txt").unwrap();
 
     for line in BufReader::new(file).lines() {
-        let value = line.unwrap().parse::<u32>().unwrap();
+        let value: u32 = line.unwrap().parse().unwrap();
 
         // Update existing Windows
         for win in &mut windows {

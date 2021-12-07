@@ -9,7 +9,7 @@ fn part1() -> u32 {
     let file = File::open("src/day3/input.txt").unwrap();
 
     let mut line_count = 0;
-    let mut bits: Vec<u32> = vec![];
+    let mut bits = vec![];
 
     for line in BufReader::new(file).lines() {
         let line = line.unwrap();
@@ -67,10 +67,10 @@ fn extract_value(mut values: Vec<u32>, value_len: u32, filter_cb: fn(u32, u32) -
 fn part2() -> u32 {
     let file = File::open("src/day3/input.txt").unwrap();
 
-    let str_values: Vec<String> = BufReader::new(file).lines().map(|l| l.unwrap()).collect();
+    let str_values: Vec<_> = BufReader::new(file).lines().map(|l| l.unwrap()).collect();
     let value_len = str_values[0].len() as u32;
 
-    let values: Vec<u32> = str_values
+    let values: Vec<_> = str_values
         .iter()
         .map(|v| u32::from_str_radix(v, 2).unwrap())
         .collect();

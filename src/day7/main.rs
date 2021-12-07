@@ -11,7 +11,7 @@ fn abs_diff(x: u32, y: u32) -> u32 {
 }
 
 fn find_shortest_path(input: &str, distance_cb: fn(pos: u32, target: u32) -> u32) -> u32 {
-    let crabs: Vec<u32> = input.split(',').map(|x| x.parse().unwrap()).collect();
+    let crabs: Vec<_> = input.split(',').map(|x| x.parse().unwrap()).collect();
 
     let min_crab = *crabs.iter().min().unwrap();
     let max_crab = *crabs.iter().max().unwrap();

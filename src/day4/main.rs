@@ -84,22 +84,22 @@ impl std::fmt::Display for Grid {
 }
 
 fn str_it_to_u32<'a, T: Iterator<Item = &'a str>>(it: T) -> Vec<u32> {
-    it.map(|v| v.parse::<u32>().unwrap()).collect()
+    it.map(|v| v.parse().unwrap()).collect()
 }
 
 fn parse_input(input: &str) -> (Vec<u32>, Vec<Grid>) {
     let mut lines = input.lines();
 
     // Get numbers
-    let numbers: Vec<u32> = str_it_to_u32(lines.next().unwrap().split(','));
+    let numbers: Vec<_> = str_it_to_u32(lines.next().unwrap().split(','));
     lines.next();
 
     // Get grids
-    let mut grids: Vec<Grid> = vec![];
+    let mut grids = vec![];
 
     loop {
         // Parse grid
-        let mut grid: Vec<u32> = vec![];
+        let mut grid = vec![];
 
         for l in (&mut lines).take(GRID_SIZE as usize) {
             let mut parsed_lined = str_it_to_u32(l.split_whitespace());
