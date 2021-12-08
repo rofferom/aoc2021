@@ -18,20 +18,21 @@ struct Segment {
 
 impl Segment {
     fn from_str(s: &str) -> Self {
-        let raw_segment: Vec<_> = s.split(" -> ").collect();
+        let segments: Vec<_> = s
+            .split(" -> ")
+            .map(|v| {
+                let splitted: Vec<_> = v.split(',').map(|x| x.parse().unwrap()).collect();
 
-        let parse_segment = |v: &str| {
-            let splitted: Vec<_> = v.split(',').collect();
-
-            let x = splitted[0].parse().unwrap();
-            let y = splitted[1].parse().unwrap();
-
-            Point { x, y }
-        };
+                Point {
+                    x: splitted[0],
+                    y: splitted[1],
+                }
+            })
+            .collect();
 
         Segment {
-            origin: parse_segment(raw_segment[0]),
-            end: parse_segment(raw_segment[1]),
+            origin: segments[0],
+            end: segments[1],
         }
     }
 
@@ -51,13 +52,8 @@ fn get_increment(x: i32, y: i32) -> i32 {
 fn score(segments: Vec<Segment>) -> u32 {
     let mut diagram = HashMap::new();
 
-    let mut update_diagram = |p: &Point| {
-        let value = diagram.get_mut(p);
-        if let Some(value) = value {
-            *value += 1;
-        } else {
-            diagram.insert(*p, 1);
-        }
+    let mut update_diagram = |p: Point| {
+        diagram.entry(p).and_modify(|e| *e += 1).or_insert(1);
     };
 
     for segment in segments {
@@ -66,16 +62,19 @@ fn score(segments: Vec<Segment>) -> u32 {
 
         let mut current = segment.origin;
         while current != segment.end {
-            update_diagram(&current);
+            update_diagram(current);
 
             current.x += x_inc;
             current.y += y_inc;
         }
 
-        update_diagram(&current);
+        update_diagram(current);
     }
 
-    diagram.iter().map(|(_, v)| v).filter(|&&v| v > 1).count() as u32
+    diagram
+        .iter()
+        .filter_map(|(_, &v)| if v > 1 { Some(v) } else { None })
+        .count() as u32
 }
 
 fn parse_input(input: &str) -> Vec<Segment> {
