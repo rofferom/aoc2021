@@ -7,14 +7,14 @@ fn is_small_cave(s: &str) -> bool {
     s.chars().all(char::is_lowercase)
 }
 
-fn visit_node(
+fn visit_node<'a>(
     graph: &HashMap<&str, Vec<&str>>,
-    start_node: &str,
-    mut hitmap: HashSet<String>,
+    start_node: &'a str,
+    mut hitmap: HashSet<&'a str>,
     allow_double_visit: bool,
 ) -> u32 {
     if is_small_cave(start_node) {
-        hitmap.insert(start_node.to_string());
+        hitmap.insert(start_node);
     }
 
     let mut score = 0;
