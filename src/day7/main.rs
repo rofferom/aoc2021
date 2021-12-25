@@ -23,7 +23,7 @@ fn find_shortest_path(input: &str, distance_cb: fn(pos: u32, target: u32) -> u32
 }
 
 fn part1(input: &str) -> u32 {
-    find_shortest_path(input, |pos, target| abs_diff(pos, target))
+    find_shortest_path(input, abs_diff)
 }
 
 fn part2(input: &str) -> u32 {
